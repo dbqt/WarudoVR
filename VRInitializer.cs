@@ -139,6 +139,7 @@ namespace QTExtensions.VR
                 customVRCamera.nearClipPlane = nearClipPlane;
                 customVRCamera.stereoTargetEye = StereoTargetEyeMask.Both;
                 customVRCamera.clearFlags = CameraClearFlags.Skybox;
+
                 var characterLayer = LayerMask.NameToLayer("Character");
                 if (showAvatar)
                 {
@@ -147,6 +148,12 @@ namespace QTExtensions.VR
                 else
                 {
                     customVRCamera.RemoveLayerFromCullingMask(characterLayer);
+                }
+
+                if (!useNativeTracking)
+                {
+                    customVRCamera.transform.localPosition = Vector3.zero;
+                    customVRCamera.transform.localRotation = Quaternion.identity;
                 }
             }
         }
