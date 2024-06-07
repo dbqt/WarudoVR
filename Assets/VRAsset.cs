@@ -72,6 +72,26 @@ namespace QTExtensions.VR.Assets
             Context.Service.Toast(Warudo.Core.Server.ToastSeverity.Success, "VR_NATIVESETUPDONE".Localized(), "VR_NATIVESETUPDETAIL".Localized());
         }
 
+        [Label("VR_NATIVEREMOVE")]
+        [Trigger]
+        public void RemoveSetup()
+        {
+            // Check if graph already exists
+            var vrTrackingGraph = Context.OpenedScene.GetGraph(VRTrackingTemplate.Guid);
+            if (vrTrackingGraph != null)
+            {
+                Context.OpenedScene.RemoveGraph(VRTrackingTemplate.Guid);
+            }
+
+            // Check if vr anchor asset already exists
+            var vrAnchorAsset = Context.OpenedScene.GetAsset(VRTrackingTemplate.AnchorAssetGuid);
+            if (vrAnchorAsset != null)
+            {
+                Context.OpenedScene.RemoveAsset(VRTrackingTemplate.AnchorAssetGuid);
+            }
+            Context.Service.BroadcastOpenedScene();
+        }
+
         [Markdown]
         public string AboutTracking2 = "VR_ABOUT2".Localized()
             ;
