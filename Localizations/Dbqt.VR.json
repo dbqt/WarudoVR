@@ -1,0 +1,16 @@
+{
+	"en": {
+		"VR_TITLE": "VR Integration",
+		"VR_DESCRIPTION": "This plugin enables VR view on Warudo.",
+        "VR_NATIVESETUP": "Native Setup",
+        "VR_NATIVESETUPDONE": "Native Setup completed!",
+        "VR_NATIVESETUPDETAIL": "A VR Anchor asset and a VR Tracking blueprint were setup automatically.",
+        "VR_CAMERASETTINGS": "Camera Settings",
+        "VR_CAMERAPOS": "Camera position offset",
+        "VR_CAMERAROT": "Camera rotation offset",
+        "VR_STRUCTUREINFO": "It's recommended to use the character asset that you are controlling. (You can edit this in the blueprint later)",
+        "VR_ABOUT1": "If native tracking is on, it's recommended to use the Native Setup below and setting it up with your character asset. This will keep the transform attachment in sync with the root of the character. Actual movements will be handled by the camera itself.",
+        "VR_ABOUT2": "If native tracking is off, you are responsible to manage how the VR camera will move around yourself by attaching this asset to something that tracks your movements.",
+        "VR_ABOUT3": "This is set automatically by the native setup, if you don't use native tracking, set this to what the VR camera should be attached to."
+	}
+}

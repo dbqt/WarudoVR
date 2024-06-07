@@ -8,7 +8,7 @@ namespace QTExtensions.VR
     [PluginType(
         Id = "Dbqt.VR",
         Name = "VR",
-        Description = "Enables VR View",
+        Description = "VR_DESCRIPTION",
         Author = "Dbqt",
         Version = "0.0.1",
         AssetTypes = new Type[]

@@ -2,6 +2,7 @@
 using Warudo.Core;
 using Warudo.Core.Attributes;
 using Warudo.Core.Data;
+using Warudo.Core.Localization;
 using Warudo.Core.Scenes;
 using Warudo.Plugins.Core.Assets.Character;
 using Warudo.Plugins.Core.Assets.Mixins;
@@ -13,7 +14,7 @@ namespace QTExtensions.VR.Assets
     /// </summary>
     [AssetType(
         Id = "d188a307-ccf3-457d-a5f5-587b4c8addd9",
-        Title = "VR Integration",
+        Title = "VR_TITLE",
         Category = "CATEGORY_EXTERNAL_INTEGRATION",
         Singleton = true)]
     public class VRAsset : Asset
@@ -27,12 +28,12 @@ namespace QTExtensions.VR.Assets
         public bool UseNativeTracking = true;
 
         [Markdown]
-        public string AboutTracking = @"If native tracking is on, it's recommended to use the Native Setup below and setting it up with your character asset. This will keep the transform attachment in sync with the root of the character. Actual movements will be handled by the camera itself.";
+        public string AboutTracking = "VR_ABOUT1".Localized();
 
         /// <summary>
         /// Starts the UX flow to generate VR tracking blueprint using provided asset.
         /// </summary>
-        [Label("Native Setup")]
+        [Label("VR_NATIVESETUP")]
         [Trigger]
         public async void GenerateVRTrackingBlueprint()
         {
@@ -68,19 +69,19 @@ namespace QTExtensions.VR.Assets
 
             this.SetDataInput("Parent", vrAnchorAsset, true);
 
-            Context.Service.Toast(Warudo.Core.Server.ToastSeverity.Success, "Native Setup completed!", "A VR Anchor asset and a VR Tracking blueprint were setup automatically.");
+            Context.Service.Toast(Warudo.Core.Server.ToastSeverity.Success, "VR_NATIVESETUPDONE".Localized(), "VR_NATIVESETUPDETAIL".Localized());
         }
 
         [Markdown]
-        public string AboutTracking2 = "If native tracking is off, you are responsible to manage how the VR camera will move around yourself by attaching this asset to " +
-                                       "something that tracks your movements.";
-        [Section("Camera Settings")]
+        public string AboutTracking2 = "VR_ABOUT2".Localized()
+            ;
+        [Section("VR_CAMERASETTINGS")]
 
-        [Label("Camera position offset")]
+        [Label("VR_CAMERAPOS")]
         [DataInput]
         public Vector3 PositionOffset;
 
-        [Label("Camera rotation offset")]
+        [Label("VR_CAMERAROT")]
         [DataInput]
         public Vector3 RotationOffset;
 
@@ -94,7 +95,7 @@ namespace QTExtensions.VR.Assets
         public Attachable attachable;
 
         [Markdown]
-        public string AboutTracking3 = "This is set automatically by the native setup, if you don't use native tracking, set this to what the VR camera should be attached to.";
+        public string AboutTracking3 = "VR_ABOUT3".Localized();
 
         private VRInitializer vrInitializerObject;
         private GameObject anchor;
@@ -169,7 +170,7 @@ namespace QTExtensions.VR.Assets
         public class CharacterAssetStructuredData : StructuredData
         {
             [Markdown]
-            public string Info = "It's recommended to use the character asset that you are controlling. (You can edit this in the blueprint later)";
+            public string Info = "VR_STRUCTUREINFO".Localized();
             [DataInput]
             public CharacterAsset CharacterAsset;
         }
