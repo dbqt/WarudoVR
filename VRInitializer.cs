@@ -64,6 +64,7 @@ namespace QTExtensions.VR
             // If it's still not available, then nothing to do
             if (XRGeneralSettings.Instance.Manager.activeLoader != null)
             {
+                Debug.Log("DBQT " + XRGeneralSettings.Instance.Manager.isInitializationComplete); 
                 XRGeneralSettings.Instance.Manager.StopSubsystems();
                 XRGeneralSettings.Instance.Manager.DeinitializeLoader();
             }
@@ -161,6 +162,7 @@ namespace QTExtensions.VR
         private IEnumerator StartXRCoroutine()
         {
             Debug.Log("Initializing XR");
+
             // Initialize if loader isn't active
             if (XRGeneralSettings.Instance.Manager.activeLoader == null)
             {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RootMotion;
+using UnityEngine;
 using Warudo.Core;
 using Warudo.Core.Attributes;
 using Warudo.Core.Data;
@@ -6,6 +7,7 @@ using Warudo.Core.Localization;
 using Warudo.Core.Scenes;
 using Warudo.Plugins.Core.Assets.Character;
 using Warudo.Plugins.Core.Assets.Mixins;
+using Warudo.Plugins.Core.Assets.MotionCapture;
 
 namespace QTExtensions.VR.Assets
 {
@@ -21,8 +23,26 @@ namespace QTExtensions.VR.Assets
     {
         private const float MinNearClipPlane = 0.001f;
 
-        [DataInput]
-        public bool Enabled = false;
+        [HiddenIf(nameof(HasNoSteamVRTrackingRunning))]
+        [Markdown]
+        public string WarningSteamVR = "VR_WARNING".Localized();
+
+        [HiddenIf(nameof(IsEnabled))]
+        [Trigger]
+        public void Enable()
+        {
+            enabled = true;
+            UpdateActiveState();
+        }
+
+        [HiddenIf(nameof(IsDisabled))]
+        [Trigger]
+        public void Disable() 
+        {
+            enabled = false;
+            UpdateActiveState();
+        }
+
 
         [DataInput]
         public bool UseNativeTracking = true;
@@ -112,17 +132,17 @@ namespace QTExtensions.VR.Assets
         public float NearClipPlane = 0.15f;
 
         [Mixin]
-        public Attachable attachable;
+        public Attachable Attachable;
 
         [Markdown]
         public string AboutTracking3 = "VR_ABOUT3".Localized();
 
         private VRInitializer vrInitializerObject;
         private GameObject anchor;
+        private bool enabled;
 
         protected override void OnCreate()
         {
-            Watch(nameof(Enabled), delegate { UpdateActiveState(); });
             Watch(nameof(PositionOffset), delegate { UpdateCameraSettings(); });
             Watch(nameof(RotationOffset), delegate { UpdateCameraSettings(); });
             Watch(nameof(ShowCharacter), delegate { UpdateCameraSettings(); });
@@ -130,7 +150,7 @@ namespace QTExtensions.VR.Assets
             Watch(nameof(UseNativeTracking), delegate { UpdateCameraSettings(); });
 
             anchor = new GameObject("VRCameraAnchor");
-            attachable.Initialize(anchor);
+            Attachable.Initialize(anchor);
             vrInitializerObject = anchor.AddComponent<VRInitializer>();
 
             UpdateActiveState();
@@ -155,20 +175,25 @@ namespace QTExtensions.VR.Assets
         private void UpdateActiveState()
         {
             ToggleVR();
-            SetActive(Enabled);
+            SetActive(enabled);
         }
 
         private void ToggleVR()
         {
-            if (Enabled)
+            if (enabled)
             {
-                vrInitializerObject.SetupCamera(anchor.transform);
+                UpdateCameraAnchor();
                 vrInitializerObject.SetupVR();
             }
             else
             {
                 vrInitializerObject.StopVR();
             }
+        }
+
+        private void UpdateCameraAnchor()
+        {
+            vrInitializerObject.SetupCamera(anchor.transform);
         }
 
         private void UpdateCameraSettings()
@@ -182,6 +207,35 @@ namespace QTExtensions.VR.Assets
                     NearClipPlane < MinNearClipPlane ? MinNearClipPlane : NearClipPlane,
                     UseNativeTracking);
             }
+        }
+
+        private bool HasSteamVRTrackingRunning()
+        {
+            var trackers = Context.OpenedScene.GetAssets();
+            foreach (var tracker in trackers.Values)
+            {
+                if (tracker.Type.Type.ToString().Contains("SteamVR"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool HasNoSteamVRTrackingRunning()
+        {
+            return !HasSteamVRTrackingRunning();
+        }
+
+        private bool IsEnabled()
+        {
+            return enabled;
+        }
+
+        private bool IsDisabled()
+        {
+            return !enabled;
         }
 
         /// <summary>
